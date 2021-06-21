@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.netology.domain.Offer;
+import ru.netology.domain.OfferByPriceComparator;
 import ru.netology.repository.OfferRepository;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 @NoArgsConstructor
 @Data
@@ -18,28 +20,19 @@ public class OfferManager {
 
 
 
-    public Offer[] findAll(String from, String to) {
+    public Offer[] findAll(String from, String to, Comparator<Offer> comparator) {
         Offer[] result = new Offer[0];
+        Arrays.sort(result);
         for (Offer offer : repository.getAll()) {
             if (from == offer.getDeparture() && to == offer.getArrival()){
                 Offer[] tmp = new Offer[result.length + 1];
                 System.arraycopy(result,0,tmp,0,result.length);
                 tmp[tmp.length - 1] = offer;
-                if (tmp.length != 1) {
-                    for (int i = 0; i < (tmp.length -1); i++ ) {
-                        Offer temp = new Offer();
-                        if (tmp[i].compareTo(tmp[i+1]) == 1){
-                            temp = tmp[i];
-                            tmp[i] = tmp[i + 1];
-                            tmp[i + 1] = temp;
-                        }
-                    }
-                }
                 result = tmp;
+                Arrays.sort(result,comparator);
             }
         }
         return result;
-
     }
 
     public void add(Offer offer) {
