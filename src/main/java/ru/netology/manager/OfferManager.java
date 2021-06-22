@@ -22,9 +22,8 @@ public class OfferManager {
 
     public Offer[] findAll(String from, String to, Comparator<Offer> comparator) {
         Offer[] result = new Offer[0];
-        Arrays.sort(result);
         for (Offer offer : repository.getAll()) {
-            if (from == offer.getDeparture() && to == offer.getArrival()){
+            if (from.equals(offer.getDeparture()) && to.equals(offer.getArrival())){
                 Offer[] tmp = new Offer[result.length + 1];
                 System.arraycopy(result,0,tmp,0,result.length);
                 tmp[tmp.length - 1] = offer;
